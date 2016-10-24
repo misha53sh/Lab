@@ -1,0 +1,76 @@
+namespace IntegralGudukhina
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Integral I = new Integral(Convert.ToDouble(textBox1), Convert.ToDouble(textBox2), Convert.ToDouble(textBox4));
+            Stopwatch t1 = new Stopwatch();
+            t1.Start();
+            double rez = I.CalculatePosled();
+            t1.Stop();
+            textBox3.Lines[1] += I.ComposeStringResult(t1.Elapsed.Milliseconds, rez);
+            Stopwatch t2 = new Stopwatch();
+            t2.Start();
+            rez = I.CalculateParallel();
+            t2.Stop();
+            textBox3.Lines[2] += I.ComposeStringResult(t2.Elapsed.Milliseconds, rez);
+        }
+    }
+}
+
+public class Integral
+{
+    public double a;
+    public double b;
+    public double h;
+
+    public Integral(double a, double b, double h)
+    {
+        this.a = a;
+        this.b = b;
+        this.h = h;
+    }
+
+    public double CalculatePosled()
+    {
+        double rez = 0.0;
+        int N = Convert.ToInt32((this.b - this.a) / this.h);
+        double x = this.a;
+        for (int i = 0; i < N; i++)
+        {
+            rez += (Function(x) + Function(x + h)) / 2.0;
+            x += h;
+        }
+        return rez*h;
+    }
+
+    public double CalculateParallel()
+    {
+        double rez = 0.0;
+        int N = Convert.ToInt32((this.b - this.a) / this.h);
+        double x = this.a;
+        return rez;
+    }
+
+    public string ComposeStringResult(int time, double resault)
+    {
+        string s = "";
+        return s = "Time: "+ time.ToString() + " Resault: " + resault.ToString(); 
+    }
+
+    private double Function(double x)
+    {
+        return 2.0 * x - Math.Log10(7 * x) - 12;
+    }
+}
